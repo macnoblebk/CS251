@@ -35,7 +35,7 @@ set(SOURCE_FILES
     tests/main.cpp
     tests/simpleArrayTest.cpp
     tests/moreTests.cpp
-)
+        src/SimpleArray.cpp)
 # Make the project root directory the working directory when we run
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 add_executable(testing ${SOURCE_FILES})
