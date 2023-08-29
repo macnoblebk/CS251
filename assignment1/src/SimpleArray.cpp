@@ -37,7 +37,9 @@ AllocationTracker* SimpleArray::release()
 
 void SimpleArray::reset(AllocationTracker* rhs)
 {
-    delete[] mArray;
+    if (rhs != mArray)
+        delete[] mArray;
+
     mArray = rhs;
 
 }
