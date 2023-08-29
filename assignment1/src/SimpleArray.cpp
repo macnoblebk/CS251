@@ -37,11 +37,10 @@ AllocationTracker* SimpleArray::release()
 
 void SimpleArray::reset(AllocationTracker* rhs)
 {
-    if (rhs != mArray)
+    if (rhs != mArray){
         delete[] mArray;
-
-    mArray = rhs;
-
+        mArray = rhs;
+    }
 }
 
 void SimpleArray::swap(SimpleArray& rhs)
