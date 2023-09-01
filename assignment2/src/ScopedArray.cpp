@@ -41,8 +41,10 @@ T* ScopedArray<T>::release() {
 
 template<typename T>
 void ScopedArray<T>::reset(T *rhs) {
-    delete[] scopedArray_;
-    scopedArray_ = rhs;
+    if (rhs != scopedArray_) {
+        delete[] scopedArray_;
+        scopedArray_ = rhs;
+    }
 }
 
 template<typename T>
