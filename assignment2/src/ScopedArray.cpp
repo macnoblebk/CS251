@@ -11,17 +11,17 @@
  */
 template<typename T>
 ScopedArray<T>::ScopedArray(T *ptr)
-: scopedArray_(ptr) {}
+: mArray(ptr) {}
 
 /**
  * Destructor: Deallocates the dynamically allocated memory held by the ScopedArray.
  * @param N/A
- * @modifies Deallocates the memory pointed to by 'scopedArray_'.
+ * @modifies Deallocates the memory pointed to by 'mArray'.
  * @return N/A
  */
 template<typename T>
 ScopedArray<T>::~ScopedArray() {
-    delete[] scopedArray_;
+    delete[] mArray;
 }
 
 /**
@@ -32,7 +32,7 @@ ScopedArray<T>::~ScopedArray() {
  */
 template<typename T>
 T* ScopedArray<T>:: get() const {
-    return scopedArray_;
+    return mArray;
 }
 
 /**
@@ -43,7 +43,7 @@ T* ScopedArray<T>:: get() const {
  */
 template<typename T>
 const T& ScopedArray<T>::operator[](size_t index) const {
-    return scopedArray_[index];
+    return mArray[index];
 }
 
 /**
@@ -54,7 +54,7 @@ const T& ScopedArray<T>::operator[](size_t index) const {
  */
 template<typename T>
 T& ScopedArray<T>::operator[](size_t index) {
-    return scopedArray_[index];
+    return mArray[index];
 }
 
 /**
@@ -65,7 +65,7 @@ T& ScopedArray<T>::operator[](size_t index) {
  */
 template<typename T>
 ScopedArray<T>::operator bool() const {
-    return scopedArray_ != nullptr;
+    return mArray != nullptr;
 }
 
 /**
@@ -76,22 +76,22 @@ ScopedArray<T>::operator bool() const {
  */
 template<typename T>
 T* ScopedArray<T>::release() {
-    T* temp = scopedArray_;
-    scopedArray_ = nullptr;
+    T* temp = mArray;
+    mArray = nullptr;
     return temp;
 }
 
 /**
  * Resets the ScopedArray to point to a new memory location, optionally deallocating the previous memory.
  * @param rhs Pointer to the new memory location. If nullptr, only deallocate the previous memory.
- * @modifies Deallocates the previous memory (if not nullptr) and updates 'scopedArray_' to 'rhs'.
+ * @modifies Deallocates the previous memory (if not nullptr) and updates 'mArray' to 'rhs'.
  * @return N/A
  */
 template<typename T>
 void ScopedArray<T>::reset(T *rhs) {
-    if (rhs != scopedArray_) {
-        delete[] scopedArray_;
-        scopedArray_ = rhs;
+    if (rhs != mArray) {
+        delete[] mArray;
+        mArray = rhs;
     }
 }
 
@@ -103,5 +103,5 @@ void ScopedArray<T>::reset(T *rhs) {
  */
 template<typename T>
 void ScopedArray<T>::swap(ScopedArray<T> &rhs) {
-    std::swap(scopedArray_, rhs.scopedArray_);
+    std::swap(mArray, rhs.mArray);
 }
