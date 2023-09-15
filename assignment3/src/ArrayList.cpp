@@ -11,3 +11,8 @@ ArrayList<T>::ArrayList()
       mCapacity(0),
       mArray(nullptr){}
 
+template<typename T>
+ArrayList<T>::ArrayList(const uint32_t &size, const T &value)
+        : mSize(size),
+          mCapacity(2*size),
+          mArray{value}{}
