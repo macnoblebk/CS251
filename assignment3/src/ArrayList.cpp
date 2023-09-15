@@ -70,7 +70,25 @@ void ArrayList<T>::set(const uint32_t &index, const T &value)  {
     // Call add
 }
 
+template<typename T>
+const T& ArrayList<T>::get(const uint32_t &index) const {
+    return mArray[index];
+}
 
+template<typename T>
+T& ArrayList<T>::get(const uint32_t &index) {
+    return mArray[index];
+}
+
+template<typename T>
+const T& ArrayList<T>::operator[](const uint32_t &index) {
+    return mArray[index];
+}
+
+template<typename T>
+T& ArrayList<T>::operator[](const uint32_t &index) {
+    return mArray[index];
+}
 
 template<typename T>
 uint32_t ArrayList<T>::size() const {
