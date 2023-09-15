@@ -20,6 +20,13 @@
 
 template <typename T> class ArrayList {
 public:
+
+class out_of_range : public std::exception {
+public:
+    const char *what() const noexcept override {
+        return "index out of range";
+    }
+    };
     /**
      * Creates an ArrayList of size 0.
      */
@@ -170,6 +177,7 @@ private:
      */
     uint32_t mCapacity;
 };
+
 
 
 #include "../src/ArrayList.cpp"
