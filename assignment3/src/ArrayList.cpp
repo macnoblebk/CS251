@@ -30,6 +30,14 @@ template<typename T>
 ArrayList<T>::ArrayList(ArrayList<T> &&src) noexcept
     : mSize(src.mSize),
       mCapacity(src.mCapacity),
-      mArray(src.mArray.release()){
+      mArray(src.mArray.release()) {
           src.mSize = src.mCapacity = 0;
       }
+
+template<typename T>
+ArrayList<T> &ArrayList<T>::operator=(const ArrayList<T> &src) {
+    if (this != src){
+        ArrayList<T>(src).swap(*this);
+    }
+    return *this;
+}
