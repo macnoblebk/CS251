@@ -52,3 +52,12 @@ ArrayList<T> &ArrayList<T>::operator=(ArrayList<T> &&src) noexcept {
     }
     return this*;
 }
+
+template<typename T>
+const uint32_t &ArrayList<T>::add(const T &value) {
+    if (full) {
+        resize();
+    }
+    mArray[size++] = value;
+    return mCapacity;
+}
