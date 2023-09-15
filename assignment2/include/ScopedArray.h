@@ -48,7 +48,7 @@ class ScopedArray {
         const ScopedArray& operator=(const ScopedArray&) = delete;
 
         // Pointer to the dynamically allocated memory.
-        T* scopedArray_;
+        T* mArray;
 };
 
 
