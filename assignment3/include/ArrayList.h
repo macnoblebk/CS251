@@ -158,7 +158,7 @@ private:
     /**
      * Wrapper around our physical buffer.
      */
-    ScopedArray<T> mArray;
+    std::unique_ptr<ScopedArray<T[]>> mArray;
 
     /**
      * The logical size of this ArrayList.
@@ -170,6 +170,7 @@ private:
      */
     uint32_t mCapacity;
 };
+
 
 #include "../src/ArrayList.cpp"
 
