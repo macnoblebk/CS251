@@ -62,6 +62,10 @@ const uint32_t &ArrayList<T>::add(const T &value) {
     return mCapacity;
 }
 
+template<typename T>
+uint32_t ArrayList<T>::size() const {
+    return mSize;
+}
 
 template<typename T>
 void ArrayList<T>::swap(ArrayList<T> &src) noexcept {
