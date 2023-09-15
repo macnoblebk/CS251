@@ -55,12 +55,22 @@ ArrayList<T> &ArrayList<T>::operator=(ArrayList<T> &&src) noexcept {
 
 template<typename T>
 const uint32_t &ArrayList<T>::add(const T &value) {
-    if (full) {
+    if (full()) {
         resize();
     }
     mArray[size++] = value;
     return mCapacity;
 }
+
+template<typename T>
+void ArrayList<T>::set(const uint32_t &index, const T &value)  {
+    if (!range())
+        throw out_of_range();
+
+    // Call add
+}
+
+
 
 template<typename T>
 uint32_t ArrayList<T>::size() const {
