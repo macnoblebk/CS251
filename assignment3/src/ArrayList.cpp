@@ -61,3 +61,11 @@ const uint32_t &ArrayList<T>::add(const T &value) {
     mArray[size++] = value;
     return mCapacity;
 }
+
+
+template<typename T>
+void ArrayList<T>::swap(ArrayList<T> &src) noexcept {
+    std::swap(mSize,src.mSize);
+    std::swap(mCapacity, src.mCapacity);
+    mArray.swap(src.mArray);
+}
