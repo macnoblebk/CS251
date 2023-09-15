@@ -26,3 +26,10 @@ ArrayList<T>::ArrayList(const ArrayList<T> &src)
               mArray[i] = src.mArray[i];
       }
 
+template<typename T>
+ArrayList<T>::ArrayList(ArrayList<T> &&src) noexcept
+    : mSize(src.mSize),
+      mCapacity(src.mCapacity),
+      mArray(src.mArray.release()){
+          src.mSize = src.mCapacity = 0;
+      }
