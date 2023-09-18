@@ -13,6 +13,7 @@ template<typename T>
 class ScopedArray {
 
     public:
+
          // Constructor: Creates a ScopedArray object with an optional pointer to dynamically allocated memory.
          explicit ScopedArray(T* ptr = nullptr);
 
@@ -48,7 +49,7 @@ class ScopedArray {
         const ScopedArray& operator=(const ScopedArray&) = delete;
 
         // Pointer to the dynamically allocated memory.
-        T* mArray;
+        ScopedArray<T> mArray;
 };
 
 
