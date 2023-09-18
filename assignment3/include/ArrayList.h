@@ -5,6 +5,7 @@
 
 #include "ScopedArray.h"
 #include <cstdint>
+#include <sstream>
 
 /**
  * An array-backed list implementation that must provide strong
@@ -23,9 +24,19 @@ public:
 
     class out_of_range : public std::exception {
     public:
-        const char *what() const noexcept override {
-            return "index out of range";
+        explicit out_of_range(uint32_t index) : index(index){
+            std::stringstream ss;
+            ss << index;
+            message =  ss.str();
         }
+
+        const char *what() const noexcept override {
+            return message.c_str();
+        }
+
+    private:
+        uint32_t index;
+        std::string message;
     };
 
     /**
