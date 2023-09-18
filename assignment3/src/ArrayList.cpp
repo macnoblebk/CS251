@@ -14,25 +14,22 @@ ArrayList<T>::ArrayList()
 template<typename T>
 ArrayList<T>::ArrayList(const uint32_t &size, const T &value)
         : mSize(size),
-          mCapacity(2*size),
-          mArray{value} {}
+          mCapacity(2*size)
+        {std::fill(std::begin(mArray), std::end(mArray), value);}
 
 template<typename T>
 ArrayList<T>::ArrayList(const ArrayList<T> &src)
     : mSize(src.mSize),
       mCapacity(src.mCapacity),
-      mArray(std::make_unique<ScopedArray<T[]>>(src.mCapacity)) {
-          for (size_t i = 0; i < src.mSize; ++i)
-              mArray[i] = src.mArray[i];
-      }
+      mArray(new T[src.mCapacity])
+    {std::copy(std::begin(src.mArray), std::end(src.mArray), std::begin(mArray));}
 
 template<typename T>
 ArrayList<T>::ArrayList(ArrayList<T> &&src) noexcept
     : mSize(src.mSize),
       mCapacity(src.mCapacity),
-      mArray(src.mArray.release()) {
-          src.mSize = src.mCapacity = 0;
-      }
+      mArray(src.mArray.release())
+    {src.mSize = src.mCapacity = 0;}
 
 template<typename T>
 ArrayList<T> &ArrayList<T>::operator=(const ArrayList<T> &src) {
@@ -50,7 +47,7 @@ ArrayList<T> &ArrayList<T>::operator=(ArrayList<T> &&src) noexcept {
         mArray.reset(src.mArray.release());
         src.mSize = src.mCapacity = 0;
     }
-    return this*;
+    return *this;
 }
 
 template<typename T>
