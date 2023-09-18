@@ -55,14 +55,14 @@ const uint32_t &ArrayList<T>::add(const T &value) {
 
 template<typename T>
 const uint32_t &ArrayList<T>::add(const uint32_t &index, const T &value) {
-
+    //TODO
 }
 
 template<typename T>
 void ArrayList<T>::resize() {
     mCapacity*= 2;
 
-
+    //TODO
 }
 
 template<typename T>
@@ -103,6 +103,7 @@ bool ArrayList<T>::isEmpty() const {
 
 template<typename T>
 T ArrayList<T>::remove(const uint32_t &index) {
+    // TODO
     return nullptr;
 }
 
@@ -111,7 +112,7 @@ void ArrayList<T>::set(const uint32_t &index, const T &value)  {
     if (!check_range(index))
         throw out_of_range(index);
 
-    // Call add
+    mArray[index] = value;
 }
 
 template<typename T>
