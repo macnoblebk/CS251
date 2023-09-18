@@ -21,12 +21,13 @@
 template <typename T> class ArrayList {
 public:
 
-class out_of_range : public std::exception {
-public:
-    const char *what() const noexcept override {
-        return "index out of range";
-    }
+    class out_of_range : public std::exception {
+    public:
+        const char *what() const noexcept override {
+            return "index out of range";
+        }
     };
+
     /**
      * Creates an ArrayList of size 0.
      */
@@ -165,7 +166,7 @@ private:
     /**
      * Wrapper around our physical buffer.
      */
-    std::unique_ptr<ScopedArray<T[]>> mArray;
+    ScopedArray<T> mArray;
 
     /**
      * The logical size of this ArrayList.
