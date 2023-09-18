@@ -163,6 +163,10 @@ public:
      */
     void swap(ArrayList<T> &src) noexcept;
 private:
+
+    void resize();
+    bool check_range(uint32_t);
+
     /**
      * Wrapper around our physical buffer.
      */
