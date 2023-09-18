@@ -3,8 +3,6 @@
 // Date: September 14, 2023
 // Purpose: Implementation file for ArrayList class
 
-
-
 template<typename T>
 ArrayList<T>::ArrayList()
     : mSize(0),
@@ -52,19 +50,25 @@ ArrayList<T> &ArrayList<T>::operator=(ArrayList<T> &&src) noexcept {
 
 template<typename T>
 const uint32_t &ArrayList<T>::add(const T &value) {
-    if (full()) {
-        resize();
-    }
-    mArray[size++] = value;
-    return mCapacity;
+    add(mSize, value);
 }
 
 template<typename T>
-void ArrayList<T>::set(const uint32_t &index, const T &value)  {
-    if (!range())
-        throw out_of_range();
+const uint32_t &ArrayList<T>::add(const uint32_t &index, const T &value) {
 
-    // Call add
+}
+
+template<typename T>
+void ArrayList<T>::resize() {
+    mCapacity*= 2;
+
+
+}
+
+template<typename T>
+void ArrayList<T>::clear() {
+    mArray = nullptr;
+    mSize = mCapacity = 0;
 }
 
 template<typename T>
@@ -73,18 +77,41 @@ const T& ArrayList<T>::get(const uint32_t &index) const {
 }
 
 template<typename T>
-T& ArrayList<T>::get(const uint32_t &index) {
-    return mArray[index];
+bool ArrayList<T>::check_range(uint32_t index) {
+    return index < mCapacity;
 }
 
 template<typename T>
-const T& ArrayList<T>::operator[](const uint32_t &index) {
+T& ArrayList<T>::get(const uint32_t &index) {
     return mArray[index];
 }
 
 template<typename T>
 T& ArrayList<T>::operator[](const uint32_t &index) {
     return mArray[index];
+}
+
+template<typename T>
+const T& ArrayList<T>::operator[](const uint32_t &index) const {
+    return mArray[index];
+}
+
+template<typename T>
+bool ArrayList<T>::isEmpty() const {
+    return mSize == 0;
+}
+
+template<typename T>
+T ArrayList<T>::remove(const uint32_t &index) {
+    return nullptr;
+}
+
+template<typename T>
+void ArrayList<T>::set(const uint32_t &index, const T &value)  {
+    if (!check_range(index))
+        throw out_of_range(index);
+
+    // Call add
 }
 
 template<typename T>
@@ -97,4 +124,8 @@ void ArrayList<T>::swap(ArrayList<T> &src) noexcept {
     std::swap(mSize,src.mSize);
     std::swap(mCapacity, src.mCapacity);
     mArray.swap(src.mArray);
+
 }
+
+
+
