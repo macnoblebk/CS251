@@ -12,7 +12,7 @@ ArrayList<T>::ArrayList()
 template<typename T>
 ArrayList<T>::ArrayList(const uint32_t &size, const T &value)
         : mSize(size),
-          mCapacity(2*size)
+          mCapacity(size)
         {std::fill(std::begin(mArray), std::end(mArray), value);}
 
 template<typename T>
@@ -20,7 +20,8 @@ ArrayList<T>::ArrayList(const ArrayList<T> &src)
     : mSize(src.mSize),
       mCapacity(src.mCapacity),
       mArray(new T[src.mCapacity])
-    {std::copy(std::begin(src.mArray), std::end(src.mArray), std::begin(mArray));}
+    {std::copy(std::begin(mArray), std::end(mArray), std::begin(mArray));}
+    //std::copy(src.mArray.get(), src.mArray.get()+mSize, mArray.get());
 
 template<typename T>
 ArrayList<T>::ArrayList(ArrayList<T> &&src) noexcept
@@ -50,39 +51,56 @@ ArrayList<T> &ArrayList<T>::operator=(ArrayList<T> &&src) noexcept {
 
 template<typename T>
 const uint32_t &ArrayList<T>::add(const T &value) {
-    add(mSize, value);
+    return add(mSize, value);
 }
 
 template<typename T>
 const uint32_t &ArrayList<T>::add(const uint32_t &index, const T &value) {
-    //TODO
+    if(!check_range(index))
+        resize();
+
+    for (uint32_t i = mSize; i > index; --i)
+        mArray[i] = std::move(mArray[i - 1]);
+
+    mArray[index] = value;
+    ++mSize;
+
+    return mCapacity;
 }
 
 template<typename T>
 void ArrayList<T>::resize() {
-    mCapacity*= 2;
-
-    //TODO
+    uint32_t newCapacity = (mCapacity == 0) ? 1 : mCapacity * 2;
+    ScopedArray<T> newArray(new T[newCapacity]);
+    std::move(std::begin(mArray), std::end(mArray), std::begin(newArray));
+    mArray.swap(newArray);
+    mCapacity = newCapacity;
 }
 
 template<typename T>
 void ArrayList<T>::clear() {
-    mArray = nullptr;
+    mArray.reset();
     mSize = mCapacity = 0;
 }
 
 template<typename T>
 const T& ArrayList<T>::get(const uint32_t &index) const {
+    if (!check_range(index))
+        throw out_of_range(index);
+
     return mArray[index];
 }
 
 template<typename T>
 bool ArrayList<T>::check_range(uint32_t index) {
-    return index < mCapacity;
+    return index <= mCapacity;
 }
 
 template<typename T>
 T& ArrayList<T>::get(const uint32_t &index) {
+    if (!check_range(index))
+        throw out_of_range(index);
+
     return mArray[index];
 }
 
@@ -103,8 +121,14 @@ bool ArrayList<T>::isEmpty() const {
 
 template<typename T>
 T ArrayList<T>::remove(const uint32_t &index) {
-    // TODO
-    return nullptr;
+    if (!check_range(index))
+        throw out_of_range(index);
+
+    T removedValue = std::move(mArray[index]);
+    //std::copy(std::begin(mArray[index]), std::end(mArray), std::begin(mArray(index)));
+    std::copy(mArray.get() + index, mArray.get()+mSize, mArray.get()+index);
+    --mSize;
+    return removedValue;
 }
 
 template<typename T>
@@ -125,7 +149,6 @@ void ArrayList<T>::swap(ArrayList<T> &src) noexcept {
     std::swap(mSize,src.mSize);
     std::swap(mCapacity, src.mCapacity);
     mArray.swap(src.mArray);
-
 }
 
 
