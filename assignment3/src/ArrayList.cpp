@@ -12,7 +12,8 @@ ArrayList<T>::ArrayList()
 template<typename T>
 ArrayList<T>::ArrayList(const uint32_t &size, const T &value)
         : mSize(size),
-          mCapacity(size)
+          mCapacity(size),
+          mArray(new T[size])
         {std::fill(std::begin(mArray), std::end(mArray), value);}
 
 template<typename T>
@@ -20,7 +21,7 @@ ArrayList<T>::ArrayList(const ArrayList<T> &src)
     : mSize(src.mSize),
       mCapacity(src.mCapacity),
       mArray(new T[src.mCapacity])
-    {std::copy(std::begin(mArray), std::end(mArray), std::begin(mArray));}
+    {std::copy(std::begin(src.mArray), std::end(src.mArray), std::begin(mArray));}
     //std::copy(src.mArray.get(), src.mArray.get()+mSize, mArray.get());
 
 template<typename T>
@@ -125,8 +126,8 @@ T ArrayList<T>::remove(const uint32_t &index) {
         throw out_of_range(index);
 
     T removedValue = std::move(mArray[index]);
-    //std::copy(std::begin(mArray[index]), std::end(mArray), std::begin(mArray(index)));
-    std::copy(mArray.get() + index, mArray.get()+mSize, mArray.get()+index);
+    std::copy(std::begin(mArray[index]), std::end(mArray), std::begin(mArray(index)));
+    //std::copy(mArray.get() + index, mArray.get()+mSize, mArray.get()+index);
     --mSize;
     return removedValue;
 }
