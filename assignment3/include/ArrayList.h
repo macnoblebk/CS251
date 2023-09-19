@@ -176,7 +176,7 @@ public:
 private:
 
     void resize();
-    bool check_range(uint32_t);
+    bool check_range(uint32_t) const;
 
     /**
      * Wrapper around our physical buffer.
