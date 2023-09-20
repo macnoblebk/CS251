@@ -27,7 +27,7 @@ ArrayList<T>::ArrayList(const uint32_t &size, const T &value)
         : mSize(size),
           mCapacity(size),
           mArray(new T[size])
-        {std::fill(std::begin(mArray), std::end(mArray), value);}
+        {std::fill(mArray.get(), mArray.get() + mSize, value);}
 
 /**
  * Copy Constructor: Creates a copy of an existing ArrayList.
@@ -40,8 +40,7 @@ ArrayList<T>::ArrayList(const ArrayList<T> &src)
     : mSize(src.mSize),
       mCapacity(src.mCapacity),
       mArray(new T[src.mCapacity])
-    {std::copy(std::begin(src.mArray), std::end(src.mArray), std::begin(mArray));}
-    //std::copy(src.mArray.get(), src.mArray.get()+mSize, mArray.get());
+    {std::copy(src.mArray.get(), src.mArray.get() + src.mSize, mArray.get());}
 
 /**
  * Move Constructor: Creates an ArrayList by moving the contents from another ArrayList.
@@ -80,6 +79,7 @@ template<typename T>
 ArrayList<T> &ArrayList<T>::operator=(ArrayList<T> &&src) noexcept {
     if (this != &src) {
         this->swap(src);
+        src.clear();
     }
     return *this;
 }
@@ -106,7 +106,7 @@ const uint32_t &ArrayList<T>::add(const uint32_t &index, const T &value) {
         resize();
         std::fill_n(std::begin(mArray[mSize]),index - mSize, T());
     }
-
+    // TODO: Revise code to provide strong exception guarantee
     if(index < mSize) {
         for (uint32_t i = mSize; i > index; --i)
             mArray[i] = std::move(mArray[i - 1]);
@@ -128,9 +128,9 @@ template<typename T>
 void ArrayList<T>::resize() {
     uint32_t newCapacity = (mCapacity == 0) ? 1 : mCapacity * 2;
     ScopedArray<T> newArray(new T[newCapacity]);
-    std::move(std::begin(mArray), std::end(mArray), std::begin(newArray));
+    std::move(mArray.get(), mArray.get() + mSize, newArray.get());
     mArray.swap(newArray);
-    mCapacity = newCapacity;
+    std::swap(mCapacity, newCapacity);
 }
 
 /**
@@ -222,7 +222,7 @@ template<typename T>
 T ArrayList<T>::remove(const uint32_t &index) {
     if (!check_range(index))
         throw out_of_range(index);
-
+    // TODO: Revise code to provide strong exception guarantee
     T removedValue = std::move(mArray[index]);
     std::copy(std::begin(mArray[index]), std::end(mArray), std::begin(mArray(index)));
     //std::copy(mArray.get() + index, mArray.get()+mSize, mArray.get()+index);
