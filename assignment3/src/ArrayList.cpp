@@ -1,6 +1,6 @@
 // Author: Mac-Noble Brako-Kusi
 // File: ArrayList.cpp
-// Date: September 14, 2023
+// Date: September 19, 2023
 // Purpose: Implementation file for ArrayList class
 
 /**
@@ -64,7 +64,7 @@ ArrayList<T>::ArrayList(ArrayList<T> &&src) noexcept
  */
 template<typename T>
 ArrayList<T> &ArrayList<T>::operator=(const ArrayList<T> &src) {
-    if (this != src) {
+    if (this != &src) {
         ArrayList<T>(src).swap(*this);
     }
     return *this;
@@ -79,10 +79,7 @@ ArrayList<T> &ArrayList<T>::operator=(const ArrayList<T> &src) {
 template<typename T>
 ArrayList<T> &ArrayList<T>::operator=(ArrayList<T> &&src) noexcept {
     if (this != &src) {
-        mSize = src.mSize;
-        mCapacity = src.mCapacity;
-        mArray.reset(src.mArray.release()); //mArray.swap(src.mArray);
-        src.mSize = src.mCapacity = 0;
+        this->swap(src);
     }
     return *this;
 }
@@ -94,9 +91,7 @@ ArrayList<T> &ArrayList<T>::operator=(ArrayList<T> &&src) noexcept {
  * @return A reference to the capacity of the ArrayList.
  */
 template<typename T>
-const uint32_t &ArrayList<T>::add(const T &value) {
-    return add(mSize, value);
-}
+const uint32_t &ArrayList<T>::add(const T &value) {return add(mSize, value);}
 
 /**
  * Inserts an element at a specific index in the ArrayList.
@@ -172,9 +167,7 @@ const T& ArrayList<T>::get(const uint32_t &index) const {
  * @return 'true' if the index is within the valid range, 'false' otherwise.
  */
 template<typename T>
-bool ArrayList<T>::check_range(uint32_t index) const {
-    return index < mCapacity;
-}
+bool ArrayList<T>::check_range(uint32_t index) const {return index < mCapacity;}
 
 /**
  * Retrieves a reference to the element at a specific index in the ArrayList.
@@ -198,9 +191,7 @@ T& ArrayList<T>::get(const uint32_t &index) {
  * @return A reference to the element at the specified index, allowing modification.
  */
 template<typename T>
-T& ArrayList<T>::operator[](const uint32_t &index) {
-    return mArray[index];
-}
+T& ArrayList<T>::operator[](const uint32_t &index) {return mArray[index];}
 
 /**
  * Accesses and returns a constant reference to the element at a specific index in the ArrayList.
@@ -209,9 +200,7 @@ T& ArrayList<T>::operator[](const uint32_t &index) {
  * @return A constant reference to the element at the specified index.
  */
 template<typename T>
-const T& ArrayList<T>::operator[](const uint32_t &index) const {
-    return mArray[index];
-}
+const T& ArrayList<T>::operator[](const uint32_t &index) const {return mArray[index];}
 
 /**
  * Checks if the ArrayList is empty.
@@ -220,9 +209,7 @@ const T& ArrayList<T>::operator[](const uint32_t &index) const {
  * @return 'true' if the ArrayList is empty, 'false' otherwise.
  */
 template<typename T>
-bool ArrayList<T>::isEmpty() const {
-    return mSize == 0;
-}
+bool ArrayList<T>::isEmpty() const {return mSize == 0;}
 
 /**
  * Removes and returns the element at a specific index in the ArrayList.
@@ -266,9 +253,7 @@ void ArrayList<T>::set(const uint32_t &index, const T &value)  {
  * @return The current size of the ArrayList.
  */
 template<typename T>
-uint32_t ArrayList<T>::size() const {
-    return mSize;
-}
+uint32_t ArrayList<T>::size() const {return mSize;}
 
 /**
  * Swaps the contents of two ArrayList objects, effectively exchanging their elements and capacity.
@@ -278,7 +263,7 @@ uint32_t ArrayList<T>::size() const {
  */
 template<typename T>
 void ArrayList<T>::swap(ArrayList<T> &src) noexcept {
-    std::swap(mSize,src.mSize);
+    std::swap(mSize, src.mSize);
     std::swap(mCapacity, src.mCapacity);
     mArray.swap(src.mArray);
 }
