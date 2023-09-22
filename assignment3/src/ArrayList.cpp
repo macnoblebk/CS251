@@ -104,13 +104,11 @@ template<typename T>
 const uint32_t &ArrayList<T>::add(const uint32_t &index, const T &value) {
     if(!check_range(index)) {
         resize();
-        std::fill_n(std::begin(mArray[mSize]),index - mSize, T());
+        std::fill_n(mArray.get() + mSize , index - mSize, T());
     }
     // TODO: Revise code to provide strong exception guarantee
-    if(index < mSize) {
-        for (uint32_t i = mSize; i > index; --i)
-            mArray[i] = std::move(mArray[i - 1]);
-    }
+    if(index < mSize)
+        std::move_backward(mArray.get() + index, mArray.get() + mSize, mArray.get() + mSize + 1);
 
     mArray[index] = value;
     ++mSize;
@@ -141,7 +139,7 @@ void ArrayList<T>::resize() {
  */
 template<typename T>
 void ArrayList<T>::clear() {
-    mArray.reset(); // mArray = nullptr;
+    mArray.reset();
     mSize = mCapacity = 0;
 }
 
@@ -224,8 +222,7 @@ T ArrayList<T>::remove(const uint32_t &index) {
         throw out_of_range(index);
     // TODO: Revise code to provide strong exception guarantee
     T removedValue = std::move(mArray[index]);
-    std::copy(std::begin(mArray[index]), std::end(mArray), std::begin(mArray(index)));
-    //std::copy(mArray.get() + index, mArray.get()+mSize, mArray.get()+index);
+    std::copy(mArray.get() + index, mArray.get() + mSize, mArray.get() + index);
     --mSize;
     return removedValue;
 }
@@ -267,6 +264,4 @@ void ArrayList<T>::swap(ArrayList<T> &src) noexcept {
     std::swap(mCapacity, src.mCapacity);
     mArray.swap(src.mArray);
 }
-
-
 
