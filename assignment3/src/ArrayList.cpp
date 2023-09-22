@@ -106,11 +106,13 @@ const uint32_t &ArrayList<T>::add(const uint32_t &index, const T &value) {
         resize();
         std::fill_n(mArray.get() + mSize , index - mSize, T());
     }
-    // TODO: Revise code to provide strong exception guarantee
     if(index < mSize)
         std::move_backward(mArray.get() + index, mArray.get() + mSize, mArray.get() + mSize + 1);
 
-    mArray[index] = value;
+    ScopedArray<T> newArray(new T [mCapacity]);
+    std::copy(mArray.get(), mArray.get() + mSize, newArray.get());
+    newArray[index] = value;
+    mArray.swap(newArray);
     ++mSize;
 
     return mCapacity;
@@ -220,11 +222,16 @@ template<typename T>
 T ArrayList<T>::remove(const uint32_t &index) {
     if (!check_range(index))
         throw out_of_range(index);
-    // TODO: Revise code to provide strong exception guarantee
-    T removedValue = std::move(mArray[index]);
-    std::copy(mArray.get() + index, mArray.get() + mSize, mArray.get() + index);
+
+    ScopedArray<T> newArray(new T[mCapacity]);
+
+    std::copy(mArray.get(), mArray.get() + mSize, newArray.get());
+    T removeValue = newArray[index];
+
+    std::copy(newArray.get() + index, newArray.get() + mSize, newArray.get() + index);
+    mArray.swap(newArray);
     --mSize;
-    return removedValue;
+    return removeValue;
 }
 
 /**
