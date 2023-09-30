@@ -1,13 +1,13 @@
 // Author: Mac-Noble Brako-Kusi
 // File: ScopedArray.h
 // Date: August 31, 2023
-// Purpose: Declaration file for ScopedArray class
+// Purpose: Declaration file for ScopedArray template class
 
 
 #ifndef MY_SCOPED_ARRAY_H
 #define MY_SCOPED_ARRAY_H
 
-#include "iostream"
+#include <iostream>
 
 template<typename T>
 class ScopedArray {
@@ -49,7 +49,7 @@ class ScopedArray {
         const ScopedArray& operator=(const ScopedArray&) = delete;
 
         // Pointer to the dynamically allocated memory.
-        ScopedArray<T> mArray;
+        T* mArray;
 };
 
 
