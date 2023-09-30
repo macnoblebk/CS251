@@ -104,14 +104,16 @@ template<typename T>
 const uint32_t &ArrayList<T>::add(const uint32_t &index, const T &value) {
     if(!check_range(index)) {
         resize();
-        std::fill_n(mArray.get() + mSize , index - mSize, T());
+        std::fill_n(mArray.get() + mSize, index - mSize, T());
     }
+
     if(index < mSize)
         std::move_backward(mArray.get() + index, mArray.get() + mSize, mArray.get() + mSize + 1);
 
-    ScopedArray<T> newArray(new T [mCapacity]);
+    ScopedArray<T> newArray(new T[mCapacity]);
     std::copy(mArray.get(), mArray.get() + mSize, newArray.get());
     newArray[index] = value;
+
     mArray.swap(newArray);
     ++mSize;
 
@@ -228,7 +230,7 @@ T ArrayList<T>::remove(const uint32_t &index) {
     std::copy(mArray.get(), mArray.get() + mSize, newArray.get());
     T removeValue = newArray[index];
 
-    std::copy(newArray.get() + index, newArray.get() + mSize, newArray.get() + index);
+    std::copy(newArray.get() + index + 1, newArray.get() + mSize, newArray.get() + index);
     mArray.swap(newArray);
     --mSize;
     return removeValue;
