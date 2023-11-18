@@ -1,7 +1,7 @@
 // Author: Mac-Noble Brako-Kusi
 // File: ArrayList.cpp
 // Date: September 19, 2023
-// Purpose: Implementation file for ArrayList class
+// Purpose: Implementation file for ArrayList template class
 
 /**
  * Constructor: Creates an empty ArrayList.
@@ -11,9 +11,9 @@
  */
 template<typename T>
 ArrayList<T>::ArrayList()
-    : mSize(0),
-      mCapacity(0),
-      mArray(nullptr) {}
+    : mArray(nullptr),
+      mSize(0),
+      mCapacity(0){}
 
 /**
  * Constructor: Creates an ArrayList with a specified size and initializes elements with a given value.
@@ -24,9 +24,9 @@ ArrayList<T>::ArrayList()
  */
 template<typename T>
 ArrayList<T>::ArrayList(const uint32_t &size, const T &value)
-        : mSize(size),
-          mCapacity(size),
-          mArray(new T[size])
+        : mArray(new T[size]),
+          mSize(size),
+          mCapacity(size)
         {std::fill(mArray.get(), mArray.get() + mSize, value);}
 
 /**
@@ -37,9 +37,9 @@ ArrayList<T>::ArrayList(const uint32_t &size, const T &value)
  */
 template<typename T>
 ArrayList<T>::ArrayList(const ArrayList<T> &src)
-    : mSize(src.mSize),
-      mCapacity(src.mCapacity),
-      mArray(new T[src.mCapacity])
+    : mArray(new T[src.mCapacity]),
+      mSize(src.mSize),
+      mCapacity(src.mCapacity)
     {std::copy(src.mArray.get(), src.mArray.get() + src.mSize, mArray.get());}
 
 /**
@@ -50,9 +50,9 @@ ArrayList<T>::ArrayList(const ArrayList<T> &src)
  */
 template<typename T>
 ArrayList<T>::ArrayList(ArrayList<T> &&src) noexcept
-    : mSize(src.mSize),
-      mCapacity(src.mCapacity),
-      mArray(src.mArray.release())
+    : mArray(src.mArray.release()),
+      mSize(src.mSize),
+      mCapacity(src.mCapacity)
     {src.mSize = src.mCapacity = 0;}
 
 /**
@@ -107,14 +107,17 @@ const uint32_t &ArrayList<T>::add(const uint32_t &index, const T &value) {
         std::fill_n(mArray.get() + mSize, index - mSize, T());
     }
 
-    if(index < mSize)
+    if(index < mSize && mSize == mCapacity) {
+        resize();
         std::move_backward(mArray.get() + index, mArray.get() + mSize, mArray.get() + mSize + 1);
+    }
 
-    ScopedArray<T> newArray(new T[mCapacity]);
-    std::copy(mArray.get(), mArray.get() + mSize, newArray.get());
-    newArray[index] = value;
+    ScopedArray<T> temp(new T[mCapacity]);
+    std::copy(mArray.get(), mArray.get() + index, temp.get());
+    temp[index] = value;
+    std::copy(mArray.get() + index, mArray.get() + mSize, temp.get() + index + 1);
 
-    mArray.swap(newArray);
+    mArray.swap(temp);
     ++mSize;
 
     return mCapacity;
